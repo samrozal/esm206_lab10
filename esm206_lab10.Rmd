@@ -54,3 +54,39 @@ R Project first, then git & GitHub repo.
 -usethis::use_git()
 -usethis::use_github
 
+
+## paletteer: aggregated color palettes
+
+```{r}
+storms %>% 
+  group_by(name) %>% 
+  summarize(min_pressure = min(pressure, na.rm=TRUE)) %>% 
+  slice_min(n=10, min_pressure) %>% 
+  ggplot(aes(x=min_pressure, y=name)) +
+  geom_col(aes(fill=name)) +
+  scale_fill_paletteer_d("palettetown::cyndaquil")
+```
+
+## Map of Jornada LTER Vegetation
+
+```{r}
+jornada_veg <- read_sf("doc.kml") %>% 
+  select(Name) %>% 
+  clean_names
+
+ggplot() + 
+  geom_sf(data = jornada_veg, aes(fill=name), color=NA) +
+  scale_fill_paletteer_d("ggthemes::manyeys")+
+  theme_minimal() +
+  labs(title= "Jornada Basin LTER Vegetation")
+  
+
+#update this map:
+# each vegetation type has a different fill color
+#update theme
+# customize the color palette
+
+ggsave(filename="my_awesome_jornada_map.png", width = 8, height = 5)
+
+```
+
